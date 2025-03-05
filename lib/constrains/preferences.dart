@@ -10,13 +10,13 @@ class RickAndMortyColors {
 class RickAndMortyTextStyles {
   static const TextStyle portalGreen30 = TextStyle(
     color: Color.fromARGB(255, 124, 252, 0), // Ядовито-зелёный (порталы)
-    fontSize: 30,
+    fontSize: 16,
     fontWeight: FontWeight.w700,
   );
 
   static const TextStyle neonBlue24 = TextStyle(
     color: Color.fromARGB(255, 0, 255, 255), // Неоново-голубой (костюм Рика)
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: FontWeight.w600,
   );
 

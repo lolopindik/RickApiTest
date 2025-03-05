@@ -6,14 +6,14 @@ class HomeAppbar {
   PreferredSizeWidget buildHomeAppbar(BuildContext context){
     return AppBar(
         title: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.045,
-          width: MediaQuery.of(context).size.width * 0.36,
+          height: 55,
+          width: 180,
           child: SvgPicture.asset(
             'lib/assets/images/Rick_and_Morty.svg',
             fit: BoxFit.cover,
           ),
         ),
-        toolbarHeight: MediaQuery.of(context).size.height * 0.07,
+        toolbarHeight: MediaQuery.of(context).size.height * 0.08,
         centerTitle: true,
         backgroundColor: RickAndMortyColors.mainColor,
         leading: IconButton(
