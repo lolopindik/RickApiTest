@@ -6,8 +6,8 @@ import 'package:rick_test/logic/bloc/CharapterBloc/charapter_bloc.dart';
 import 'package:rick_test/logic/bloc/CharapterBloc/charapter_event.dart';
 import 'package:rick_test/logic/bloc/CharapterBloc/charapter_state.dart';
 import 'package:rick_test/logic/bloc/repository/charapter_reposytory.dart';
+import 'package:rick_test/logic/funcs/crossaxis_mixin.dart';
 import 'package:rick_test/logic/service/api_service.dart';
-import 'package:rick_test/presentation/widgets/crossaxis_mixin.dart';
 
 class HomePage with CrossaxisX {
   Widget buildHomePage(BuildContext context) {

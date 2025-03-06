@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rick_test/constrains/preferences.dart';
-import 'package:rick_test/presentation/screens/home_screen.dart';
+import 'package:rick_test/presentation/router/app_router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const HomeScreen(), 
+      initialRoute: AppRouter.main,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }
