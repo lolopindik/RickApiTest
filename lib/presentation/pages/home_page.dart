@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/constrains/preferences.dart';
@@ -75,23 +76,29 @@ class HomePage {
                             ),
                             child: Column(
                               children: [
-                                Text(
-                                  character.name,
-                                  style: RickAndMortyTextStyles.neonBlue24,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  character.status,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color:
-                                        (character.status == 'Alive')
-                                            ? RickAndMortyColors.secondaryColor
-                                            : Colors.red,
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.05,
+                                  child: AutoSizeText(
+                                    character.name,
+                                    style: RickAndMortyTextStyles.neonBlue24,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
                                   ),
-                                  textAlign: TextAlign.center,
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    character.status,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color:
+                                          (character.status == 'Alive')
+                                              ? RickAndMortyColors.secondaryColor
+                                              : Colors.red,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                  ),
                                 ),
                               ],
                             ),
