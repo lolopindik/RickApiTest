@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-mixin CrossaxisWidget {
+mixin CrossaxisX{
   int getCrossAxisCount(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     if (width > 900) return 4;  

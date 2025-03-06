@@ -11,9 +11,6 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: HomeAppbar().buildHomeAppbar(context),
       backgroundColor: RickAndMortyColors.mainColor,
-      // bottomNavigationBar: Container(
-      //   height: MediaQuery.of(context).size.height * 0.2,
-      //   color: Colors.red,),
       body: HomePage().buildHomePage(context),
     );
   }

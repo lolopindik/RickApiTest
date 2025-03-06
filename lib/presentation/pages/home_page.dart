@@ -7,9 +7,9 @@ import 'package:rick_test/logic/bloc/CharapterBloc/charapter_event.dart';
 import 'package:rick_test/logic/bloc/CharapterBloc/charapter_state.dart';
 import 'package:rick_test/logic/bloc/repository/charapter_reposytory.dart';
 import 'package:rick_test/logic/service/api_service.dart';
-import 'package:rick_test/presentation/widgets/crossaxis_widget.dart';
+import 'package:rick_test/presentation/widgets/crossaxis_mixin.dart';
 
-class HomePage with CrossaxisWidget {
+class HomePage with CrossaxisX {
   Widget buildHomePage(BuildContext context) {
     return BlocProvider(
       create: (context) => CharacterBloc(
@@ -28,9 +28,10 @@ class HomePage with CrossaxisWidget {
               } else if (state is CharactersLoaded) {
                 return Scrollbar(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.05, 
-                      vertical: 20,
+                    padding: EdgeInsets.only(
+                      left:  MediaQuery.of(context).size.width * 0.05,
+                      right:  MediaQuery.of(context).size.width * 0.05,
+                      top: 15
                     ),
                     child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
