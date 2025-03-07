@@ -34,8 +34,8 @@ class MainScreen extends StatelessWidget {
               unselectedItemColor: Colors.grey,
               items: const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled),
-                  label: 'Home',
+                  icon: Icon(Icons.person),
+                  label: 'Charapters',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.star),
