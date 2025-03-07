@@ -8,8 +8,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeAppbar = HomeAppbar();
     return Scaffold(
-      appBar: HomeAppbar().buildHomeAppbar(context),
+      key: UniqueKey(),
+      appBar: homeAppbar.buildHomeAppbar(context),
+      drawer: homeAppbar.buildDrawer(context),
       backgroundColor: RickAndMortyColors.mainColor,
       body: HomePage().buildHomePage(context),
     );

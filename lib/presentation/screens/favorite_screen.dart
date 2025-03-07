@@ -8,8 +8,10 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeAppbar = HomeAppbar();
     return Scaffold(
-      appBar: HomeAppbar().buildHomeAppbar(context),
+      appBar: homeAppbar.buildHomeAppbar(context),
+      drawer: homeAppbar.buildDrawer(context),
       backgroundColor: RickAndMortyColors.mainColor,
       body: FavoritePage().buildFavorite(context),
     );

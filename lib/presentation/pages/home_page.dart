@@ -29,7 +29,7 @@ class HomePage with CrossaxisX {
               if (state is CharacterLoading) {
                 return const Center(
                   child: CircularProgressIndicator(
-                    color: RickAndMortyColors.seedColor,
+                    color: RickAndMortyColors.secondaryColor,
                   ),
                 );
               } else if (state is CharactersLoaded) {
