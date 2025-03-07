@@ -90,7 +90,6 @@ class HomePage with CrossaxisX {
                                           style: RickAndMortyTextStyles.neonBlue24,
                                           textAlign: TextAlign.center,
                                           maxLines: 2,
-                                          minFontSize: 16,
                                         ),
                                       ),
                                       Align(
