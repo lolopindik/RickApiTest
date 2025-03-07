@@ -83,7 +83,8 @@ class HomePage with CrossaxisX {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      SizedBox(
+                                      Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 10),
                                         height: MediaQuery.of(context).size.height * 0.045,
                                         child: AutoSizeText(
                                           character.name,
