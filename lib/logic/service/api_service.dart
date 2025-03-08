@@ -5,7 +5,7 @@ class ApiService {
   final Dio _dio = Dio();
   final String baseUrl = 'https://rickandmortyapi.com/api';
 
-  Future<List<Character>> getCharacters({int page = 1}) async {
+  Future<List<Character>> getCharacters(int page) async {
     try {
       final response = await _dio.get('$baseUrl/character?page=$page');
       

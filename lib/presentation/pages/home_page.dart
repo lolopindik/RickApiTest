@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/constrains/preferences.dart';
 import 'package:rick_test/logic/bloc/CharapterBloc/charapter_bloc.dart';
-import 'package:rick_test/logic/bloc/CharapterBloc/charapter_event.dart';
-import 'package:rick_test/logic/bloc/CharapterBloc/charapter_state.dart';
 import 'package:rick_test/logic/bloc/repository/charapter_reposytory.dart';
 import 'package:rick_test/logic/funcs/crossaxis_mixin.dart';
 import 'package:rick_test/logic/service/api_service.dart';
@@ -37,7 +35,6 @@ class HomePage with CrossaxisX {
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: MediaQuery.of(context).size.width * 0.05,
-                      vertical: 20,
                     ),
                     child: GridView.builder(
                       physics: const BouncingScrollPhysics(),

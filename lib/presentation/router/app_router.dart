@@ -5,7 +5,6 @@ import 'package:rick_test/presentation/screens/main_screen.dart';
 import 'package:rick_test/presentation/screens/character_details_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/logic/bloc/CharapterBloc/charapter_bloc.dart';
-import 'package:rick_test/logic/bloc/CharapterBloc/charapter_event.dart';
 
 class AppRouter {
   static const String main = '/';

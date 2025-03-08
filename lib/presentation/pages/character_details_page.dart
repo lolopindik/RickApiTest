@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/constrains/preferences.dart';
 import 'package:rick_test/logic/bloc/CharapterBloc/charapter_bloc.dart';
-import 'package:rick_test/logic/bloc/CharapterBloc/charapter_state.dart';
 import 'package:rick_test/logic/model/character.dart';
 
 class CharacterDetailsPage {
@@ -22,7 +21,7 @@ class CharacterDetailsPage {
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: MediaQuery.of(context).size.height,
-                maxWidth: 800, // Максимальная ширина контента
+                maxWidth: 900,
               ),
               child: Padding(
                 padding: EdgeInsets.only(

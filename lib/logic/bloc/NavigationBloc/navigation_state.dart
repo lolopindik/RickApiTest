@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'navigation_bloc.dart';
 
 class NavigationState extends Equatable {
   final int currentIndex;

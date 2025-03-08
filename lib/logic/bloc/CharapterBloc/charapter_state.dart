@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:rick_test/logic/model/character.dart';
+part of 'charapter_bloc.dart';
 
 abstract class CharacterState extends Equatable {
   const CharacterState();

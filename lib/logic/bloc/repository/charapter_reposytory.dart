@@ -14,7 +14,7 @@ class CharacterRepositoryImpl implements CharacterRepository {
   @override
   Future<List<Character>> getAllCharacters() async {
     try {
-      return await _apiService.getAllCharacters();
+      return await _apiService.getCharacters(1);
     } catch (e) {
       throw Exception('Failed to fetch characters: $e');
     }

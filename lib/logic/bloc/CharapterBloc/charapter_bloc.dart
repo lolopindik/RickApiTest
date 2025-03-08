@@ -1,7 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_test/logic/bloc/CharapterBloc/charapter_event.dart';
-import 'package:rick_test/logic/bloc/CharapterBloc/charapter_state.dart';
 import 'package:rick_test/logic/bloc/repository/charapter_reposytory.dart';
+import 'package:rick_test/logic/model/character.dart';
+
+part 'charapter_event.dart';
+part 'charapter_state.dart';
 
 class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
   final CharacterRepository repository;
