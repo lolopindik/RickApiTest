@@ -5,155 +5,228 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/constrains/preferences.dart';
 import 'package:rick_test/logic/bloc/CharapterBloc/charapter_bloc.dart';
+import 'package:rick_test/logic/bloc/PaginationBloc/pagination_bloc.dart';
 import 'package:rick_test/logic/bloc/repository/charapter_reposytory.dart';
 import 'package:rick_test/logic/funcs/crossaxis_mixin.dart';
 import 'package:rick_test/logic/service/api_service.dart';
 import 'package:rick_test/presentation/router/app_router.dart';
 
-class HomePage with CrossaxisX {
+class HomePage {
   Widget buildHomePage(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CharacterBloc(
-        repository: CharacterRepositoryImpl(ApiService())
-      )..add(const FetchCharacters()),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 1200, 
-            minWidth: 300,  
-          ),
-          child: BlocBuilder<CharacterBloc, CharacterState>(
-            builder: (context, state) {
-              if (state is CharacterLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: RickAndMortyColors.secondaryColor,
-                  ),
-                );
-              } else if (state is CharactersLoaded) {
-                return Scrollbar(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.05,
-                    ),
-                    child: GridView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: getCrossAxisCount(context), 
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 20,
-                        childAspectRatio: 0.75,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CharacterBloc(
+            repository: CharacterRepositoryImpl(ApiService()),
+          )..add(const FetchCharacters()),
+        ),
+        BlocProvider(
+          create: (context) => PaginationBloc(ApiService())..add(LoadNextPage()),
+        ),
+      ],
+      child: HomePageContent(),
+    );
+  }
+}
+
+class HomePageContent extends StatefulWidget{
+  const HomePageContent({super.key});
+
+  @override
+  HomePageContentState createState() => HomePageContentState();
+}
+
+class HomePageContentState extends State<HomePageContent> with CrossaxisX{
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.9) {
+      context.read<PaginationBloc>().add(LoadNextPage());
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 1200,
+          minWidth: 300,
+        ),
+        child: BlocBuilder<CharacterBloc, CharacterState>(
+          builder: (context, state) {
+            if (state is CharacterLoading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: RickAndMortyColors.secondaryColor,
+                ),
+              );
+            } else if (state is CharactersLoaded) {
+              return BlocBuilder<PaginationBloc, PaginationState>(
+                builder: (context, paginationState) {
+                  final characters = List.from(state.characters);
+                  if (paginationState is PaginationLoaded) {
+                    characters.addAll(paginationState.characters);
+                  }
+                  return Scrollbar(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.05,
                       ),
-                      itemCount: state.characters.length,
-                      itemBuilder: (context, index) {
-                        final character = state.characters[index];
-                        return GestureDetector(
-                          onTap: () => Navigator.pushNamed(
-                            context,
-                            AppRouter.characterDetails,
-                            arguments: character.id,
-                          ),
-                          child: Hero(
-                            tag: 'character_image_${character.id}',
-                            child: Material(
-                              color: Colors.transparent,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black87,
-                                  border: Border.all(
-                                    color: RickAndMortyColors.secondaryColor,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: RickAndMortyColors.seedColor.withOpacity(0.3),
-                                      blurRadius: 8,
-                                      spreadRadius: 0,
+                      child: GridView.builder(
+                        controller: _scrollController,
+                        physics: const BouncingScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: getCrossAxisCount(context),
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 20,
+                          childAspectRatio: 0.75,
+                        ),
+                        itemCount: characters.length +
+                            (paginationState is PaginationLoading ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == characters.length) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: RickAndMortyColors.secondaryColor,
+                              ),
+                            );
+                          }
+                          final character = characters[index];
+                          return GestureDetector(
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              AppRouter.characterDetails,
+                              arguments: character.id,
+                            ),
+                            child: Hero(
+                              tag: 'character_image_${character.id}',
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.black87,
+                                    border: Border.all(
+                                      color: RickAndMortyColors.secondaryColor,
+                                      width: 2,
                                     ),
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.vertical(
-                                          top: Radius.circular(18),
-                                        ),
-                                        child: Image.network(
-                                          character.image,
-                                          fit: BoxFit.cover,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: RickAndMortyColors.seedColor
+                                            .withOpacity(0.3),
+                                        blurRadius: 8,
+                                        spreadRadius: 0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
+                                        flex: 3,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              const BorderRadius.vertical(
+                                            top: Radius.circular(18),
+                                          ),
+                                          child: Image.network(
+                                            character.image,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(12),
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              RickAndMortyColors.mainColor,
-                                              RickAndMortyColors.mainColor.withOpacity(0.9),
-                                            ],
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                RickAndMortyColors.mainColor,
+                                                RickAndMortyColors.mainColor
+                                                    .withOpacity(0.9),
+                                              ],
+                                            ),
+                                            borderRadius:
+                                                const BorderRadius.vertical(
+                                              bottom: Radius.circular(18),
+                                            ),
                                           ),
-                                          borderRadius: const BorderRadius.vertical(
-                                            bottom: Radius.circular(18),
-                                          ),
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Center(
-                                                child: AutoSizeText(
-                                                  character.name,
-                                                  style: RickAndMortyTextStyles.neonBlue24.copyWith(
-                                                    fontSize: 20,
-                                                    height: 1.2,
-                                                    shadows: [
-                                                      Shadow(
-                                                        color: RickAndMortyColors.seedColor.withOpacity(0.5),
-                                                        blurRadius: 4,
-                                                      ),
-                                                    ],
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Center(
+                                                  child: AutoSizeText(
+                                                    character.name,
+                                                    style: RickAndMortyTextStyles
+                                                        .neonBlue24
+                                                        .copyWith(
+                                                      fontSize: 20,
+                                                      height: 1.2,
+                                                      shadows: [
+                                                        Shadow(
+                                                          color:
+                                                              RickAndMortyColors
+                                                                  .seedColor
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                          blurRadius: 4,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 2,
+                                                    minFontSize: 14,
                                                   ),
-                                                  textAlign: TextAlign.center,
-                                                  maxLines: 2,
-                                                  minFontSize: 14,
                                                 ),
                                               ),
-                                            ),
-                                            _buildStatusBadge(character.status),
-                                          ],
+                                              _buildStatusBadge(
+                                                  character.status),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                );
-              } else if (state is CharacterError) {
-                return _buildErrorState(context);
-              }
-              return const Center(
-                child: Text(
-                  'Loading characters...',
-                  style: RickAndMortyTextStyles.neonBlue24,
-                ),
+                  );
+                },
               );
-            },
-          ),
+            } else if (state is CharacterError) {
+              return _buildErrorState(context);
+            }
+            return const Center(
+              child: Text(
+                'Loading characters...',
+                style: RickAndMortyTextStyles.neonBlue24,
+              ),
+            );
+          },
         ),
       ),
     );

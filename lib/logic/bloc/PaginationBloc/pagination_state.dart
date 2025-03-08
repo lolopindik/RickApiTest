@@ -1,10 +1,35 @@
+
 part of 'pagination_bloc.dart';
 
-sealed class PaginationState extends Equatable {
-  const PaginationState();
-  
+abstract class PaginationState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-final class PaginationInitial extends PaginationState {}
+class PaginationInitial extends PaginationState {}
+
+class PaginationLoading extends PaginationState {
+  final List<Character> characters;
+  PaginationLoading(this.characters);
+  
+  @override
+  List<Object> get props => [characters];
+}
+
+class PaginationLoaded extends PaginationState {
+  final List<Character> characters;
+  final bool hasMore;
+  
+  PaginationLoaded(this.characters, this.hasMore);
+  
+  @override
+  List<Object> get props => [characters, hasMore];
+}
+
+class PaginationError extends PaginationState {
+  final String message;
+  PaginationError(this.message);
+  
+  @override
+  List<Object> get props => [message];
+}

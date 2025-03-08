@@ -17,9 +17,9 @@ class MainScreen extends StatelessWidget {
           return Scaffold(
             body: IndexedStack(
               index: state.currentIndex,
-              children: const [
+              children: [
                 HomeScreen(),
-                FavoriteScreen(),
+                const FavoriteScreen(),
               ],
             ),
             bottomNavigationBar: BottomNavigationBar(

@@ -1,8 +1,8 @@
 part of 'pagination_bloc.dart';
 
-sealed class PaginationEvent extends Equatable {
-  const PaginationEvent();
-
+abstract class PaginationEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class LoadNextPage extends PaginationEvent {}
