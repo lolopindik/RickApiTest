@@ -8,6 +8,7 @@ import 'package:rick_test/logic/bloc/CharapterBloc/charapter_bloc.dart';
 import 'package:rick_test/logic/bloc/PaginationBloc/pagination_bloc.dart';
 import 'package:rick_test/logic/bloc/repository/charapter_reposytory.dart';
 import 'package:rick_test/logic/funcs/crossaxis_mixin.dart';
+import 'package:rick_test/logic/model/character.dart';
 import 'package:rick_test/logic/service/api_service.dart';
 import 'package:rick_test/presentation/router/app_router.dart';
 
@@ -24,20 +25,21 @@ class HomePage {
           create: (context) => PaginationBloc(ApiService())..add(LoadNextPage()),
         ),
       ],
-      child: HomePageContent(),
+      child: const HomePageContent(),
     );
   }
 }
 
-class HomePageContent extends StatefulWidget{
+class HomePageContent extends StatefulWidget {
   const HomePageContent({super.key});
 
   @override
   HomePageContentState createState() => HomePageContentState();
 }
 
-class HomePageContentState extends State<HomePageContent> with CrossaxisX{
+class HomePageContentState extends State<HomePageContent> with CrossaxisX {
   final ScrollController _scrollController = ScrollController();
+  final List<Character> _allCharacters = [];
 
   @override
   void initState() {
@@ -75,11 +77,13 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX{
                 ),
               );
             } else if (state is CharactersLoaded) {
+              if (_allCharacters.isEmpty) {
+                _allCharacters.addAll(state.characters);
+              }
               return BlocBuilder<PaginationBloc, PaginationState>(
                 builder: (context, paginationState) {
-                  final characters = List.from(state.characters);
                   if (paginationState is PaginationLoaded) {
-                    characters.addAll(paginationState.characters);
+                    _allCharacters.addAll(paginationState.characters);
                   }
                   return Scrollbar(
                     child: Padding(
@@ -87,6 +91,7 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX{
                         horizontal: MediaQuery.of(context).size.width * 0.05,
                       ),
                       child: GridView.builder(
+                        key: const PageStorageKey('charactersGrid'),
                         controller: _scrollController,
                         physics: const BouncingScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -95,17 +100,17 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX{
                           mainAxisSpacing: 20,
                           childAspectRatio: 0.75,
                         ),
-                        itemCount: characters.length +
+                        itemCount: _allCharacters.length +
                             (paginationState is PaginationLoading ? 1 : 0),
                         itemBuilder: (context, index) {
-                          if (index == characters.length) {
+                          if (index == _allCharacters.length) {
                             return const Center(
                               child: CircularProgressIndicator(
                                 color: RickAndMortyColors.secondaryColor,
                               ),
                             );
                           }
-                          final character = characters[index];
+                          final character = _allCharacters[index];
                           return GestureDetector(
                             onTap: () => Navigator.pushNamed(
                               context,
@@ -126,22 +131,19 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX{
                                     borderRadius: BorderRadius.circular(20),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: RickAndMortyColors.seedColor
-                                            .withOpacity(0.3),
+                                        color: RickAndMortyColors.seedColor.withOpacity(0.3),
                                         blurRadius: 8,
                                         spreadRadius: 0,
                                       ),
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Expanded(
                                         flex: 3,
                                         child: ClipRRect(
-                                          borderRadius:
-                                              const BorderRadius.vertical(
+                                          borderRadius: const BorderRadius.vertical(
                                             top: Radius.circular(18),
                                           ),
                                           child: Image.network(
@@ -160,35 +162,26 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX{
                                               end: Alignment.bottomCenter,
                                               colors: [
                                                 RickAndMortyColors.mainColor,
-                                                RickAndMortyColors.mainColor
-                                                    .withOpacity(0.9),
+                                                RickAndMortyColors.mainColor.withOpacity(0.9),
                                               ],
                                             ),
-                                            borderRadius:
-                                                const BorderRadius.vertical(
+                                            borderRadius: const BorderRadius.vertical(
                                               bottom: Radius.circular(18),
                                             ),
                                           ),
                                           child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Expanded(
                                                 child: Center(
                                                   child: AutoSizeText(
                                                     character.name,
-                                                    style: RickAndMortyTextStyles
-                                                        .neonBlue24
-                                                        .copyWith(
+                                                    style: RickAndMortyTextStyles.neonBlue24.copyWith(
                                                       fontSize: 20,
                                                       height: 1.2,
                                                       shadows: [
                                                         Shadow(
-                                                          color:
-                                                              RickAndMortyColors
-                                                                  .seedColor
-                                                                  .withOpacity(
-                                                                      0.5),
+                                                          color: RickAndMortyColors.seedColor.withOpacity(0.5),
                                                           blurRadius: 4,
                                                         ),
                                                       ],
@@ -199,8 +192,7 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX{
                                                   ),
                                                 ),
                                               ),
-                                              _buildStatusBadge(
-                                                  character.status),
+                                              _buildStatusBadge(character.status),
                                             ],
                                           ),
                                         ),
@@ -246,17 +238,11 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX{
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 4,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.black45,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: statusColor,
-          width: 1.5,
-        ),
+        border: Border.all(color: statusColor, width: 1.5),
         boxShadow: [
           BoxShadow(
             color: statusColor.withOpacity(0.3),
@@ -327,20 +313,14 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX{
             style: ElevatedButton.styleFrom(
               backgroundColor: RickAndMortyColors.secondaryColor,
               foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
             child: const Text(
               'Retry',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
         ],
