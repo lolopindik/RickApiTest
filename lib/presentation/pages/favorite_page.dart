@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:rick_test/constrains/preferences.dart';
+import 'package:rick_test/config/theme/app_theme.dart';
 
 class FavoritePage {
   Widget buildFavorite(BuildContext context){

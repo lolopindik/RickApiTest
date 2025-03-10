@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:rick_test/logic/model/character.dart';
+import 'package:rick_test/config/constrains/api_constrains.dart';
+import 'package:rick_test/core/model/character.dart';
 
-class ApiService {
+class ApiService with ApiX{
   final Dio _dio = Dio();
-  final String baseUrl = 'https://rickandmortyapi.com/api';
 
   Future<List<Character>> getCharacters(int page) async {
     try {

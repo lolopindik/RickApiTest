@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../service/api_service.dart';
-import '../../model/character.dart';
+import '../../../core/remote/service/api_service.dart';
+import '../../../core/model/character.dart';
 
 part 'pagination_event.dart';
 part 'pagination_state.dart';

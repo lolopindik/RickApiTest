@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/logic/bloc/repository/charapter_reposytory.dart';
-import 'package:rick_test/logic/model/character.dart';
+import 'package:rick_test/core/model/character.dart';
 
 part 'charapter_event.dart';
 part 'charapter_state.dart';

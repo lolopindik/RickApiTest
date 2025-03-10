@@ -1,5 +1,5 @@
-import 'package:rick_test/logic/model/character.dart';
-import 'package:rick_test/logic/service/api_service.dart';
+import 'package:rick_test/core/model/character.dart';
+import 'package:rick_test/core/remote/service/api_service.dart';
 
 abstract class CharacterRepository {
   Future<List<Character>> getAllCharacters();

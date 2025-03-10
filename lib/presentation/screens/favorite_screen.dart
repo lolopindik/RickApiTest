@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rick_test/constrains/preferences.dart';
+import 'package:rick_test/config/theme/app_theme.dart';
 import 'package:rick_test/presentation/pages/favorite_page.dart';
+import 'package:rick_test/presentation/widgets/drawer_widget.dart';
 import 'package:rick_test/presentation/widgets/home_appbar.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -9,9 +10,10 @@ class FavoriteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeAppbar = HomeAppbar();
+    final drawer = DrawerWidget();
     return Scaffold(
       appBar: homeAppbar.buildHomeAppbar(context),
-      drawer: homeAppbar.buildDrawer(context),
+      drawer: drawer.buildDrawer(context),
       backgroundColor: RickAndMortyColors.mainColor,
       body: FavoritePage().buildFavorite(context),
     );

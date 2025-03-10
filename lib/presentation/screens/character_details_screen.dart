@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:rick_test/constrains/preferences.dart';
+import 'package:rick_test/config/theme/app_theme.dart';
 import 'package:rick_test/presentation/pages/character_details_page.dart';
 
 class CharacterDetailsScreen extends StatelessWidget {

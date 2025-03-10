@@ -3,11 +3,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_test/constrains/preferences.dart';
+import 'package:rick_test/config/theme/app_theme.dart';
 import 'package:rick_test/logic/bloc/PaginationBloc/pagination_bloc.dart';
 import 'package:rick_test/logic/funcs/crossaxis_mixin.dart';
-import 'package:rick_test/logic/model/character.dart';
-import 'package:rick_test/logic/service/api_service.dart';
+import 'package:rick_test/core/remote/service/api_service.dart';
 import 'package:rick_test/presentation/router/app_router.dart';
 
 class HomePage {

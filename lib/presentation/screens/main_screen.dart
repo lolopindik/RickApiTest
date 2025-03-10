@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_test/constrains/preferences.dart';
+import 'package:rick_test/config/theme/app_theme.dart';
 import 'package:rick_test/logic/bloc/NavigationBloc/navigation_bloc.dart';
 import 'package:rick_test/presentation/screens/home_screen.dart';
 import 'package:rick_test/presentation/screens/favorite_screen.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rick_test/logic/bloc/repository/charapter_reposytory.dart';
-import 'package:rick_test/logic/service/api_service.dart';
+import 'package:rick_test/core/remote/service/api_service.dart';
 import 'package:rick_test/presentation/screens/main_screen.dart';
 import 'package:rick_test/presentation/screens/character_details_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
