@@ -11,7 +11,7 @@ class ConnectivityService {
   Timer? _debounceTimer;
 
   ConnectivityService() {
-    Future.delayed(const Duration(seconds: 10), () {
+    Future.delayed(const Duration(seconds: 1), () {
       _initConnectivity();
       _setupConnectivityListener();
     });
@@ -40,7 +40,7 @@ class ConnectivityService {
       (results) {
         _debounceTimer?.cancel();
         
-        _debounceTimer = Timer(const Duration(seconds: 10), () {
+        _debounceTimer = Timer(const Duration(seconds: 1), () {
           bool isConnected;
           if (results is List<ConnectivityResult>) {
             isConnected = _checkConnections(results);
