@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../core/remote/service/api_service.dart';
+import '../../../core/service/api_service.dart';
 import '../../../core/model/character.dart';
 
 part 'pagination_event.dart';
@@ -36,20 +36,26 @@ class PaginationBloc extends Bloc<PaginationEvent, PaginationState> {
   }
 
   Future<void> _onLoadNextPage(LoadNextPage event, Emitter<PaginationState> emit) async {
-    if (_isLoading || !_hasMore) return;
+    if (_isLoading) {
+      return;
+    }
+    if (!_hasMore) {
+      emit(PaginationLoaded(_characters, false));
+      return;
+    }
+
     _isLoading = true;
     emit(PaginationLoading(_characters));
+    
     try {
       final newCharacters = await _apiService.getCharacters(_currentPage);
-      if (newCharacters.isEmpty) {
-        _hasMore = false;
-      } else {
-        _characters.addAll(newCharacters);
-        _currentPage++;
-      }
+      _characters.addAll(newCharacters);
+      _currentPage++;
+      _hasMore = newCharacters.isNotEmpty;
+      
       emit(PaginationLoaded(_characters, _hasMore));
-    } catch (_) {
-      emit(PaginationError("Ошибка при загрузке следующей страницы"));
+    } catch (e) {
+      emit(PaginationError('Не удалось загрузить персонажей: ${e.toString()}'));
     } finally {
       _isLoading = false;
     }

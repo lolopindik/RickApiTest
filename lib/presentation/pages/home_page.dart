@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/config/theme/app_theme.dart';
 import 'package:rick_test/logic/bloc/PaginationBloc/pagination_bloc.dart';
 import 'package:rick_test/logic/funcs/crossaxis_mixin.dart';
-import 'package:rick_test/core/remote/service/api_service.dart';
+import 'package:rick_test/core/service/api_service.dart';
 import 'package:rick_test/presentation/router/app_router.dart';
 
 class HomePage {
