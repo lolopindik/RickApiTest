@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/config/theme/app_theme.dart';
 import 'package:rick_test/logic/bloc/ConnectivityBloc/connectivity_bloc.dart';
 
-class ConnectivityBanner extends StatelessWidget {
+class ConnectivityBanner extends StatefulWidget {
   final Widget child;
 
   const ConnectivityBanner({
@@ -12,17 +12,26 @@ class ConnectivityBanner extends StatelessWidget {
   });
 
   @override
+  State<ConnectivityBanner> createState() => _ConnectivityBannerState();
+}
+
+class _ConnectivityBannerState extends State<ConnectivityBanner> {
+  bool _wasDisconnected = false;
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<ConnectivityBloc, ConnectivityState>(
       listener: (context, state) {
         if (state is ConnectivityDisconnected) {
+          _wasDisconnected = true;
           _showSnackBar(
             context,
             'Нет подключения к интернету',
             Colors.red,
             Icons.wifi_off,
           );
-        } else if (state is ConnectivityConnected) {
+        } else if (state is ConnectivityConnected && _wasDisconnected) {
+          _wasDisconnected = false;
           _showSnackBar(
             context,
             'Подключение восстановлено',
@@ -31,7 +40,7 @@ class ConnectivityBanner extends StatelessWidget {
           );
         }
       },
-      child: child,
+      child: widget.child,
     );
   }
 

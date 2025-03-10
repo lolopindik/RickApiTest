@@ -1,18 +1,16 @@
+// ignore_for_file: unnecessary_type_check
+
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:flutter/material.dart';
 
 class ConnectivityService {
   final _connectivity = Connectivity();
-  final _internetChecker = InternetConnectionChecker.createInstance();
-  
   StreamController<bool> connectionStatusController = StreamController<bool>.broadcast();
   bool _previousState = true;
   Timer? _debounceTimer;
 
   ConnectivityService() {
-    // Задержка 10 секунд перед первой проверкой
     Future.delayed(const Duration(seconds: 10), () {
       _initConnectivity();
       _setupConnectivityListener();
@@ -21,10 +19,16 @@ class ConnectivityService {
 
   Future<void> _initConnectivity() async {
     try {
-      final result = await _connectivity.checkConnectivity();
-      final isConnected = await _checkConnection(result as ConnectivityResult);
-      _previousState = isConnected;
-      connectionStatusController.add(isConnected);
+      final results = await _connectivity.checkConnectivity();
+      if (results is List<ConnectivityResult>) {
+        final isConnected = _checkConnections(results);
+        _previousState = isConnected;
+        connectionStatusController.add(isConnected);
+      } else {
+        final isConnected = _checkConnection(results as ConnectivityResult);
+        _previousState = isConnected;
+        connectionStatusController.add(isConnected);
+      }
     } catch (e) {
       debugPrint('Ошибка при инициализации подключения: $e');
       connectionStatusController.add(false);
@@ -33,32 +37,37 @@ class ConnectivityService {
 
   void _setupConnectivityListener() {
     _connectivity.onConnectivityChanged.listen(
-      (result) async {
-        // Отменяем предыдущий таймер, если он существует
+      (results) {
         _debounceTimer?.cancel();
         
-        // Создаем новый таймер с задержкой
-        _debounceTimer = Timer(const Duration(seconds: 10), () async {
-          try {
-            final isConnected = await _checkConnection(result as ConnectivityResult);
-            if (isConnected != _previousState) {
-              _previousState = isConnected;
-              connectionStatusController.add(isConnected);
-            }
-          } catch (e) {
-            debugPrint('Ошибка при проверке подключения: $e');
-            connectionStatusController.add(false);
+        _debounceTimer = Timer(const Duration(seconds: 10), () {
+          bool isConnected;
+          if (results is List<ConnectivityResult>) {
+            isConnected = _checkConnections(results);
+          } else {
+            isConnected = _checkConnection(results as ConnectivityResult);
+          }
+          if (isConnected != _previousState) {
+            _previousState = isConnected;
+            connectionStatusController.add(isConnected);
           }
         });
       },
     );
   }
 
-  Future<bool> _checkConnection(ConnectivityResult result) async {
-    if (result == ConnectivityResult.none) {
-      return false;
-    }
-    return await _internetChecker.hasConnection;
+  bool _checkConnections(List<ConnectivityResult> results) {
+    return results.any((result) => 
+      result == ConnectivityResult.wifi || 
+      result == ConnectivityResult.mobile ||
+      result == ConnectivityResult.ethernet
+    );
+  }
+
+  bool _checkConnection(ConnectivityResult result) {
+    return result == ConnectivityResult.wifi || 
+           result == ConnectivityResult.mobile ||
+           result == ConnectivityResult.ethernet;
   }
 
   void dispose() {
