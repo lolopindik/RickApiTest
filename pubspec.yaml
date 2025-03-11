@@ -13,14 +13,25 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
+  dio: ^5.8.0+1
+
   flutter_svg: ^2.0.17
   auto_size_text: ^3.0.0
-  dio: ^5.8.0+1
+
   flutter_bloc: ^9.1.0
   equatable: ^2.0.7
+
   url_launcher: ^6.3.1
   connectivity_plus: ^6.1.3
   internet_connection_checker: ^3.0.1
+
+  cached_network_image: ^3.4.1
+  path_provider: ^2.1.5
+  flutter_cache_manager: ^3.4.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  build_runner: ^2.4.15
+  hive_generator: ^2.0.1
   
 dev_dependencies:
   flutter_test:

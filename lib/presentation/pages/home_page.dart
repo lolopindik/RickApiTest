@@ -8,6 +8,7 @@ import 'package:rick_test/logic/bloc/PaginationBloc/pagination_bloc.dart';
 import 'package:rick_test/logic/funcs/crossaxis_mixin.dart';
 import 'package:rick_test/core/service/api_service.dart';
 import 'package:rick_test/presentation/router/app_router.dart';
+import 'package:rick_test/core/cache/image_cache_config.dart';
 
 class HomePage {
   Widget buildHomePage(BuildContext context) {
@@ -90,8 +91,12 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX {
                     itemBuilder: (context, index) {
                       if (index == characters.length && hasMore) {
                         return const Center(
-                          child: CircularProgressIndicator(
-                            color: RickAndMortyColors.secondaryColor,
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(
+                              color: RickAndMortyColors.secondaryColor,
+                              strokeWidth: 2,
+                            ),
                           ),
                         );
                       }
@@ -132,8 +137,8 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX {
                                       borderRadius: const BorderRadius.vertical(
                                         top: Radius.circular(18),
                                       ),
-                                      child: Image.network(
-                                        character.image,
+                                      child: ImageCacheConfig.getNetworkImage(
+                                        imageUrl: character.image,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -194,7 +199,27 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX {
                 ),
               );
             } else if (state is PaginationError) {
-              return _buildErrorState(context);
+              final characters = state.message.contains('кэшированные данные')
+                  ? [] 
+                  : (state as dynamic).characters ?? []; 
+
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildErrorState(context),
+                    if (characters.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Text(
+                          'Показаны сохранённые данные',
+                          style: RickAndMortyTextStyles.toxicPink14,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                  ],
+                ),
+              );
             }
             return const Center(
               child: Text(
@@ -285,14 +310,16 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX {
           ),
           const SizedBox(height: 16),
           Text(
-            'Failed to load characters',
+            'Не удалось загрузить персонажей.\nПроверьте подключение к интернету',
             style: RickAndMortyTextStyles.neonBlue24.copyWith(fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
-              context.read<PaginationBloc>().add(LoadInitialPage());
+              context.read<PaginationBloc>()
+                ..add(RefreshCharacters())
+                ..add(LoadInitialPage());
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: RickAndMortyColors.secondaryColor,
@@ -303,7 +330,7 @@ class HomePageContentState extends State<HomePageContent> with CrossaxisX {
               ),
             ),
             child: const Text(
-              'Retry',
+              'Повторить',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),

@@ -8,9 +8,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/core/service/connectivity_service.dart';
 import 'package:rick_test/logic/bloc/ConnectivityBloc/connectivity_bloc.dart';
 import 'package:rick_test/presentation/widgets/connectivity_banner.dart';
+import 'package:rick_test/core/cache/cache_manager.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  try {
+    await AppCacheManager().init();
+    debugPrint('Кэш успешно инициализирован');
+  } catch (e) {
+    debugPrint('Ошибка инициализации кэша: $e');
+  }
+  
   Bloc.observer = AppBlocObserver();
   runApp(const MyApp());
 }
