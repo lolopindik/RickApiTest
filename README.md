@@ -1,16 +1,5 @@
-# rick_test
+![photo_2025-03-11_19-04-25](https://github.com/user-attachments/assets/be5dd744-624b-48af-bb29-d6e351a1bdf5)
 
-A new Flutter project.
+![photo_2025-03-11_19-04-25 (2)](https://github.com/user-attachments/assets/cd771312-dee8-4eec-b514-ed956e0a1a40)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![photo_2025-03-11_19-08-08](https://github.com/user-attachments/assets/7b79afe8-9e39-4df8-8e94-dc6c5e3faf17)
