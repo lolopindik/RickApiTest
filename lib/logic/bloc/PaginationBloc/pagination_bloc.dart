@@ -52,19 +52,25 @@ class PaginationBloc extends Bloc<PaginationEvent, PaginationState> {
     _isLoading = true;
 
     try {
+      emit(PaginationLoading(_characters));
+      
       final newCharacters = await _apiService.getCharacters(_currentPage);
       if (newCharacters.isNotEmpty) {
         _characters.addAll(newCharacters);
         _currentPage++;
-        emit(PaginationLoaded(_characters, true));
+        _hasMore = newCharacters.length >= 20;
+        emit(PaginationLoaded(_characters, _hasMore));
       } else {
         _hasMore = false;
         emit(PaginationLoaded(_characters, false));
       }
     } catch (e) {
       debugPrint('Ошибка загрузки следующей страницы: $e');
-      _hasMore = false;
-      emit(PaginationLoaded(_characters, false));
+      if (_characters.isNotEmpty) {
+        emit(PaginationLoaded(_characters, false));
+      } else {
+        emit(PaginationError(e.toString()));
+      }
     } finally {
       _isLoading = false;
     }
