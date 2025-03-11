@@ -121,7 +121,7 @@ class AppCacheManager {
     for (var key in _charactersCache.keys) {
       final cached = _charactersCache.get(key);
       if (cached != null) {
-        // Примерный подсчет размера данных
+        //todo нужно будет как-то потимизировать это дело
         totalSize += cached.toString().length;
       }
     }

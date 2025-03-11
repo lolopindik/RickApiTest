@@ -9,6 +9,7 @@ import 'package:rick_test/core/service/connectivity_service.dart';
 import 'package:rick_test/logic/bloc/ConnectivityBloc/connectivity_bloc.dart';
 import 'package:rick_test/presentation/widgets/connectivity_banner.dart';
 import 'package:rick_test/core/cache/cache_manager.dart';
+import 'package:rick_test/logic/bloc/FavoritesBloc/favorites_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ConnectivityBloc(connectivityService),
+        ),
+        BlocProvider(
+          create: (context) => FavoritesBloc(),
         ),
       ],
       child: MaterialApp(

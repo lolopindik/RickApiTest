@@ -5,10 +5,12 @@ import 'package:rick_test/presentation/screens/main_screen.dart';
 import 'package:rick_test/presentation/screens/character_details_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_test/logic/bloc/CharapterBloc/charapter_bloc.dart';
+import 'package:rick_test/presentation/pages/favorites_page.dart';
 
 class AppRouter {
   static const String main = '/';
   static const String characterDetails = '/character-details';
+  static const String favorites = '/favorites';
   
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -26,7 +28,10 @@ class AppRouter {
             child: CharacterDetailsScreen(characterId: characterId),
           ),
         );
-      
+      case favorites:
+        return MaterialPageRoute(
+          builder: (_) => const FavoritesPage(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
